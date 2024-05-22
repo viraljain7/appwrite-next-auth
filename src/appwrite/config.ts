@@ -42,12 +42,35 @@ export class appwriteService {
 
   async login({ email, password }: loginUserAccount) {
     try {
-    } catch (error: any) {}
+      return await account.createEmailSession(email, password);
+    } catch (error: any) {
+      throw error;
+    }
   }
 
-  async isLoggedIn() {}
+  async isLoggedIn(): Promise<boolean> {
+    try {
+      const userData = await this.getCurrentUser();
+      return Boolean(userData); //it will return true if userData exists else return false
+    } catch (error) {}
+    return false;
+  }
 
-  async getCurrentUser() {}
+  async getCurrentUser() {
+    try {
+      return account.get();
+    } catch (error) {
+      throw error;
+    }
+    return null;
+  }
 
-  async logout() {}
+  async logout() {
+    try {
+      return await account.deleteSessions("current");
+    } catch (error) {
+      throw error;
+    }
+  }
 }
+export default appwriteService;
